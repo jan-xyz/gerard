@@ -7,5 +7,8 @@ func TestConnect(t *testing.T) {
 }
 
 func TestLoginToSlack(t *testing.T) {
-	LoginToSlack()
+	test := LoginToSlack()
+	if test != "ws://echo.websocket.org/" {
+		t.Fail()
+	}
 }
