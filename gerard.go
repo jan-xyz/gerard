@@ -19,33 +19,9 @@ func Connect() {
 	for _, user := range SlackData.Users {
 		log.Printf("User: %s (%s) is %s", user.Name, user.ID, user.Presence)
 	}
-	websocket := connectWebsocket(wssurl)
+	websocketConnection := ConnectWebsocket(wssurl)
 	for {
-		msg, n := readMessage(websocket)
+		msg, n := readMessage(websocketConnection)
 		log.Printf("Received: %s", string(msg[:n]))
 	}
-}
-
-func connectWebsocket(url string) *websocket.Conn {
-	origin := "http://localhost/"
-	ws, err := websocket.Dial(url, "", origin)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return ws
-}
-
-func sendMessage(message string, ws *websocket.Conn) {
-	if _, err := ws.Write([]byte(message)); err != nil {
-		log.Fatal(err)
-	}
-}
-
-func readMessage(ws *websocket.Conn) ([]byte, int) {
-	var msg = make([]byte, 512)
-	n, err := ws.Read(msg)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return msg, n
 }
