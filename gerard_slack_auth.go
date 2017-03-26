@@ -40,6 +40,7 @@ type group struct {
 	Name string `json:"name"`
 }
 
+// StartRTM : Login to Slack via rtm.start
 func StartRTM() {
 	loginURL := getLoginURL()
 	reader := getLoginRequestReader(loginURL)
