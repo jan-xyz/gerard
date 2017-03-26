@@ -9,8 +9,8 @@ import (
 	"os"
 )
 
-// HTTPSlackResponse : structure that should fit the JSON getting back
-type HTTPSlackResponse struct {
+// Data : structure that should fit the JSON getting back
+type Data struct {
 	URL      string `json:"url"`
 	OK       bool   `json:"ok"`
 	Users    []user `json:"users"`
@@ -20,8 +20,9 @@ type HTTPSlackResponse struct {
 }
 
 type user struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+	ID       string `json:"id"`
+	Name     string `json:"name"`
+	Presence string `json:"presence"`
 }
 
 type team struct {
@@ -43,9 +44,9 @@ type group struct {
 func GetWssURL() string {
 	loginURL := getLoginURL()
 	reader := getLoginRequestReader(loginURL)
-	LoginJSON := getLoginJSONFromReader(reader)
+	SlackData = getLoginJSONFromReader(reader)
 	closeLoginRequestReader(reader)
-	return LoginJSON.URL
+	return SlackData.URL
 }
 
 func getLoginURL() string {
@@ -61,14 +62,12 @@ func getLoginRequestReader(loginURL string) io.ReadCloser {
 	return resp.Body
 }
 
-func getLoginJSONFromReader(reader io.ReadCloser) *HTTPSlackResponse {
+func getLoginJSONFromReader(reader io.ReadCloser) *Data {
 	loginStructBytes := new(bytes.Buffer)
 	loginStructBytes.ReadFrom(reader)
 	s := loginStructBytes.String()
-	log.Print(s)
-	loginStruct := new(HTTPSlackResponse)
+	loginStruct := new(Data)
 	err := json.Unmarshal([]byte(s), loginStruct)
-	// err := json.NewDecoder(reader).Decode(loginStruct)
 	if err != nil {
 		log.Fatal(err)
 	}
