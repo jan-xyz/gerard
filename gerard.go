@@ -1,11 +1,7 @@
 package main
 
 import (
-	"encoding/json"
-	"io"
 	"log"
-	"net/http"
-	"os"
 
 	"golang.org/x/net/websocket"
 )
