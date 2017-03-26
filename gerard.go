@@ -1,8 +1,7 @@
-package gerard
+package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -22,18 +21,10 @@ type HTTPSlackResponse struct {
 
 // Connect : connects to a websocket
 func Connect() {
-	origin := "http://localhost/"
-	url := GetWssURL()
-	ws, err := websocket.Dial(url, "", origin)
-	if err != nil {
-		log.Fatal(err)
-	}
-	var msg = make([]byte, 512)
-	var n int
-	if n, err = ws.Read(msg); err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("Received: %s.\n", msg[:n])
+	wssurl := GetWssURL()
+	websocket := connectWebsocket(wssurl)
+	msg, n := readMessage(websocket)
+	log.Printf("Received: %s", string(msg[:n]))
 }
 
 // GetWssURL : returns a wss URL for Slack
@@ -43,6 +34,15 @@ func GetWssURL() string {
 	LoginJSON := getLoginJSONFromReader(reader)
 	closeLoginRequestReader(reader)
 	return LoginJSON.URL
+}
+
+func connectWebsocket(url string) *websocket.Conn {
+	origin := "http://localhost/"
+	ws, err := websocket.Dial(url, "", origin)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return ws
 }
 
 func getLoginURL() string {
@@ -59,14 +59,29 @@ func getLoginRequestReader(loginURL string) io.ReadCloser {
 }
 
 func getLoginJSONFromReader(reader io.ReadCloser) *HTTPSlackResponse {
-	m := new(HTTPSlackResponse)
-	err := json.NewDecoder(reader).Decode(m)
+	loginStruct := new(HTTPSlackResponse)
+	err := json.NewDecoder(reader).Decode(loginStruct)
 	if err != nil {
 		log.Fatal(err)
 	}
-	return m
+	return loginStruct
 }
 
 func closeLoginRequestReader(reader io.ReadCloser) {
 	defer reader.Close()
+}
+
+func sendMessage(message string, ws *websocket.Conn) {
+	if _, err := ws.Write([]byte(message)); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func readMessage(ws *websocket.Conn) ([]byte, int) {
+	var msg = make([]byte, 512)
+	n, err := ws.Read(msg)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return msg, n
 }
