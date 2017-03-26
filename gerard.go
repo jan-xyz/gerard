@@ -25,5 +25,6 @@ func Connect() {
 	SlackConnection = ConnectWebsocket()
 	for {
 		msg, n := readMessage(SlackConnection)
+		ParseMessage(msg[:n])
 	}
 }
