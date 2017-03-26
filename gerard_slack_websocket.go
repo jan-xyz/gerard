@@ -7,9 +7,9 @@ import (
 )
 
 // ConnectWebsocket : returns a Websocket connection that can be written/read
-func ConnectWebsocket(url string) *websocket.Conn {
+func ConnectWebsocket() *websocket.Conn {
 	origin := "http://localhost/"
-	ws, err := websocket.Dial(url, "", origin)
+	ws, err := websocket.Dial(SlackData.URL, "", origin)
 	if err != nil {
 		log.Fatal(err)
 	}
