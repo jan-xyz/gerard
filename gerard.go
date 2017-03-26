@@ -23,8 +23,10 @@ type HTTPSlackResponse struct {
 func Connect() {
 	wssurl := GetWssURL()
 	websocket := connectWebsocket(wssurl)
-	msg, n := readMessage(websocket)
-	log.Printf("Received: %s", string(msg[:n]))
+	for {
+		msg, n := readMessage(websocket)
+		log.Printf("Received: %s", string(msg[:n]))
+	}
 }
 
 // GetWssURL : returns a wss URL for Slack

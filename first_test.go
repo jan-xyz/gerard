@@ -1,17 +1,9 @@
-package gerard
+package main
 
 import (
 	"os"
 	"testing"
 )
-
-//func TestConnect(t *testing.T) {
-//	Connect()
-//}
-
-func TestLoginToSlack(t *testing.T) {
-	GetWssURL()
-}
 
 func TestGetLoginURL(t *testing.T) {
 	testAPIToken := "test"
