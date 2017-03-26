@@ -40,12 +40,15 @@ type group struct {
 	Name string `json:"name"`
 }
 
-// GetWssURL : returns a wss URL for Slack
-func GetWssURL() string {
+func StartRTM() {
 	loginURL := getLoginURL()
 	reader := getLoginRequestReader(loginURL)
 	SlackData = getLoginJSONFromReader(reader)
 	closeLoginRequestReader(reader)
+}
+
+// GetWssURL : returns a wss URL for Slack
+func GetWssURL() string {
 	return SlackData.URL
 }
 

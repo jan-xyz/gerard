@@ -15,7 +15,7 @@ var SlackData *Data
 
 // Connect : connects to a websocket
 func Connect() {
-	wssurl := GetWssURL()
+	StartRTM()
 	for _, user := range SlackData.Users {
 		log.Printf("User: %s (%s) is %s", user.Name, user.ID, user.Presence)
 	}
