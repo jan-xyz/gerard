@@ -9,4 +9,5 @@ test: deps
 	go test .
 
 deps:
-	git submodule update --init --recursive
+	go get -u github.com/golang/dep/cmd/dep
+	dep ensure
