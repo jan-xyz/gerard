@@ -2,31 +2,42 @@ package main
 
 import (
 	"log"
+	"net/http"
 
-	"golang.org/x/net/websocket"
+	//	"golang.org/x/net/websocket"
+	"github.com/gorilla/websocket"
 )
 
 // ConnectWebsocket : returns a Websocket connection that can be written/read
-func ConnectWebsocket() *websocket.Conn {
+func ConnectWebsocket(slackURL string) *websocket.Conn {
 	origin := "http://localhost/"
-	ws, err := websocket.Dial(SlackData.URL, "", origin)
+	//conn, err := net.Dial("tcp", parseUrlToDial(slackUrl))
+	headers := http.Header(map[string][]string{"origin": []string{origin}})
+	conn, resp, err := websocket.DefaultDialer.Dial(slackURL, headers)
+	if resp.StatusCode != http.StatusOK {
+		log.Fatal("response from slack not ok")
+	}
 	if err != nil {
 		log.Fatal(err)
 	}
-	return ws
+	return conn
+}
+
+func parseURLToDial(url string) string {
+	return ""
 }
 
 func sendMessage(message string, ws *websocket.Conn) {
-	if _, err := ws.Write([]byte(message)); err != nil {
+	if err := ws.WriteMessage(websocket.TextMessage, []byte(message)); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func readMessage(ws *websocket.Conn) ([]byte, int) {
-	var msg = make([]byte, 512)
-	n, err := ws.Read(msg)
+func readMessage(ws *websocket.Conn) []byte {
+	msgType, msg, err := ws.ReadMessage()
+	log.Printf("received message type: %d, content: %s", msgType, string(msg))
 	if err != nil {
 		log.Fatal(err)
 	}
-	return msg, n
+	return msg
 }

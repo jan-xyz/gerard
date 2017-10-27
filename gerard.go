@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"golang.org/x/net/websocket"
+	"github.com/gorilla/websocket"
 )
 
 func main() {
@@ -22,9 +22,9 @@ func Connect() {
 	for _, user := range SlackData.Users {
 		log.Printf("User: %s (%s) is %s", user.Name, user.ID, user.Presence)
 	}
-	SlackConnection = ConnectWebsocket()
+	SlackConnection = ConnectWebsocket(SlackData.URL)
 	for {
-		msg, n := readMessage(SlackConnection)
-		ParseMessage(msg[:n])
+		msg := readMessage(SlackConnection)
+		ParseMessage(msg)
 	}
 }
