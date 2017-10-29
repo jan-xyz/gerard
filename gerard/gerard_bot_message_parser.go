@@ -1,4 +1,4 @@
-package main
+package gerard
 
 import (
 	"encoding/json"
@@ -23,7 +23,7 @@ type RTMSlackObject struct {
 }
 
 // ParseMessage : Parses message to decide usage
-func ParseMessage(msg []byte) {
+func ParseMessage(msg []byte, data *Data) {
 	proto := new(RTMSlackObject)
 	err := json.Unmarshal(msg, proto)
 	if err != nil {
@@ -35,7 +35,7 @@ func ParseMessage(msg []byte) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		for _, user := range SlackData.Users {
+		for _, user := range data.Users {
 			if user.ID == presenceChange.User {
 				user.Presence = presenceChange.Presence
 				log.Printf("%s is now %s", user.Name, user.Presence)

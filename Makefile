@@ -3,10 +3,10 @@ default: all
 all: compile
 
 compile: deps test
-	go build .
+	go build ./cmd/gerardd
 
 test: deps
-	go test .
+	go test ./gerard/tests
 
 deps:
 	go get -u github.com/golang/dep/cmd/dep

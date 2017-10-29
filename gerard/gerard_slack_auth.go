@@ -1,4 +1,4 @@
-package main
+package gerard
 
 import (
 	"bytes"
@@ -13,13 +13,14 @@ import (
 type Data struct {
 	URL      string `json:"url"`
 	OK       bool   `json:"ok"`
-	Users    []user `json:"users"`
+	Users    []User `json:"users"`
 	Teams    team   `json:"team"`
 	Channels []team `json:"channels"`
 	Groups   []team `json:"groups"`
+	Error    string `json:"error"`
 }
 
-type user struct {
+type User struct {
 	ID       string `json:"id"`
 	Name     string `json:"name"`
 	Presence string `json:"presence"`
@@ -41,19 +42,20 @@ type group struct {
 }
 
 // StartRTM : Login to Slack via rtm.start
-func StartRTM() {
-	loginURL := getLoginURL()
+func StartRTM() *Data {
+	loginURL := GetLoginURL()
 	reader := getLoginRequestReader(loginURL)
-	SlackData = getLoginJSONFromReader(reader)
+	data := getLoginJSONFromReader(reader)
 	closeLoginRequestReader(reader)
+	return data
 }
 
 // GetWssURL : returns a wss URL for Slack
-func GetWssURL() string {
-	return SlackData.URL
+func GetWssURL(data *Data) string {
+	return data.URL
 }
 
-func getLoginURL() string {
+func GetLoginURL() string {
 	apikey := os.Getenv("ROLLMOPS_SLACK_API_KEY")
 	return "http://slack.com/api/rtm.start?token=" + apikey
 }

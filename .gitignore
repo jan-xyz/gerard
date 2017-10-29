@@ -22,7 +22,10 @@ _testmain.go
 *.exe
 *.test
 *.prof
-gerard
 
 # vim swap
 .*.sw?
+
+# build artifacts but not the source directory
+gerardd
+!/cmd/gerardd
