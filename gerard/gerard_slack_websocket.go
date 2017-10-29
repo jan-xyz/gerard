@@ -31,8 +31,7 @@ func sendMessage(message string, ws *websocket.Conn) {
 }
 
 func ReadMessage(ws *websocket.Conn) []byte {
-	msgType, msg, err := ws.ReadMessage()
-	log.Printf("received message type: %d, content: %s", msgType, string(msg))
+	_, msg, err := ws.ReadMessage()
 	if err != nil {
 		log.Fatal(err)
 	}
