@@ -3,8 +3,6 @@ package gerard
 import (
 	"log"
 	"net/http"
-
-	//	"golang.org/x/net/websocket"
 	"github.com/gorilla/websocket"
 )
 
