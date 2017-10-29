@@ -13,8 +13,8 @@ func ConnectWebsocket(slackURL string) *websocket.Conn {
 	origin := "http://localhost/"
 	headers := http.Header(map[string][]string{"origin": []string{origin}})
 	conn, resp, err := websocket.DefaultDialer.Dial(slackURL, headers)
-	if resp.StatusCode != http.StatusOK {
-		log.Fatal("response from slack not ok")
+	if resp.StatusCode != http.StatusSwitchingProtocols {
+		log.Fatalf("response from slack not ok: %d", resp.StatusCode)
 	}
 	if err != nil {
 		log.Fatal(err)
