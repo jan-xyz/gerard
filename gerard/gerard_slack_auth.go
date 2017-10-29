@@ -50,11 +50,6 @@ func StartRTM() *Data {
 	return data
 }
 
-// GetWssURL : returns a wss URL for Slack
-func GetWssURL(data *Data) string {
-	return data.URL
-}
-
 func GetLoginURL() string {
 	apikey := os.Getenv("ROLLMOPS_SLACK_API_KEY")
 	if apikey=="" {
