@@ -11,13 +11,13 @@ import (
 
 // Data : structure that should fit the JSON getting back
 type Data struct {
-	URL      string `json:"url"`
-	OK       bool   `json:"ok"`
-	Users    []User `json:"users"`
-	Teams    team   `json:"team"`
-	Channels []team `json:"channels"`
-	Groups   []team `json:"groups"`
-	Error    string `json:"error"`
+	URL      string    `json:"url"`
+	OK       bool      `json:"ok"`
+	Users    []User    `json:"users"`
+	Team     team      `json:"team"`
+	Channels []channel `json:"channels"`
+	Groups   []group   `json:"groups"`
+	Error    string    `json:"error"`
 }
 
 type User struct {
