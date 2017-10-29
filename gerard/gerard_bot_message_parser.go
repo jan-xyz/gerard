@@ -17,6 +17,10 @@ type slackPresenceChange struct {
 	Presence string `json:"presence"`
 }
 
+type reconnectURL struct {
+	URL string `json:"url"`
+}
+
 // RTMSlackObject : structure for identifying Slack JSON messages
 type RTMSlackObject struct {
 	Type string `json:"type"`
@@ -43,6 +47,15 @@ func ParseMessage(msg []byte, data *Data) {
 		}
 	} else if proto.Type == "hello" {
 		log.Print("Successfully logged in.")
+	} else if proto.Type == "reconnect_url" {
+		urlContainer := new(reconnectURL)
+		err = json.Unmarshal(msg, urlContainer)
+		if err != nil {
+			log.Fatal(err)
+		}
+		data.URL = urlContainer.URL
+		log.Printf("New reconnection URL set: %s", data.URL)
+
 	} else {
 		log.Printf("Received: %s", string(msg))
 	}
