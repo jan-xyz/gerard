@@ -6,13 +6,13 @@ import (
 )
 
 type slackJson struct {
-	Type string `json:"type"`
+	Type      string `json:"type"`
 	Channel   string `json:"channel"`
 	User      string `json:"user"`
 	Text      string `json:"text"`
 	Timestamp string `json:"ts"`
-	Presence string `json:"presence"`
-	URL string `json:"url"`
+	Presence  string `json:"presence"`
+	URL       string `json:"url"`
 }
 
 // ParseMessage : Parses message to decide usage
