@@ -3,6 +3,7 @@ package gerard_core
 import (
 	"encoding/json"
 	"log"
+	"github.com/gorilla/websocket"
 )
 
 type slackJson struct {
@@ -37,5 +38,23 @@ func ParseMessage(msg []byte, data *Data) {
 
 	} else {
 		log.Printf("Received: %s", string(msg))
+	}
+}
+
+// SlackConnection : Can be used to read/write to slack
+var slackConnection *websocket.Conn
+
+// Connect : connects to a websocket
+func Connect() {
+	slackData := StartRTM()
+	for _, user := range slackData.Users {
+		log.Printf("User: %s (%s) is %s", user.Name, user.ID, user.Presence)
+	}
+	log.Print(slackData.Channels)
+	log.Print(slackData.Users)
+	slackConnection = ConnectWebsocket(slackData.URL)
+	for {
+		msg := ReadMessage(slackConnection)
+		ParseMessage(msg, slackData)
 	}
 }
