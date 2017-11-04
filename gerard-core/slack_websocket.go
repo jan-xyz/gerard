@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 	"github.com/gorilla/websocket"
-	"os"
 	"io"
 	"bytes"
 	"encoding/json"
@@ -43,19 +42,15 @@ type group struct {
 }
 
 // StartRTM : Login to Slack via rtm.start
-func StartRTM() *Data {
-	loginURL := GetLoginURL()
+func StartRTM(apikey string) *Data {
+	loginURL := GetLoginURL(apikey)
 	reader := getLoginRequestReader(loginURL)
 	data := getLoginJSONFromReader(reader)
 	closeLoginRequestReader(reader)
 	return data
 }
 
-func GetLoginURL() string {
-	apikey := os.Getenv("ROLLMOPS_SLACK_API_KEY")
-	if apikey == "" {
-		log.Fatal("no API key found.")
-	}
+func GetLoginURL(apikey string) string {
 	return "http://slack.com/api/rtm.start?token=" + apikey
 }
 

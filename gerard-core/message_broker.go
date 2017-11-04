@@ -45,8 +45,8 @@ func ParseMessage(msg []byte, data *Data) {
 var slackConnection *websocket.Conn
 
 // Connect : connects to a websocket
-func Connect() {
-	slackData := StartRTM()
+func Connect(apikey string) {
+	slackData := StartRTM(apikey)
 	for _, user := range slackData.Users {
 		log.Printf("User: %s (%s) is %s", user.Name, user.ID, user.Presence)
 	}
