@@ -5,55 +5,34 @@ import (
 	"log"
 )
 
-type slackMessage struct {
+type slackJson struct {
+	Type string `json:"type"`
 	Channel   string `json:"channel"`
 	User      string `json:"user"`
 	Text      string `json:"text"`
 	Timestamp string `json:"ts"`
-}
-
-type slackPresenceChange struct {
-	User     string `json:"user"`
 	Presence string `json:"presence"`
-}
-
-type reconnectURL struct {
 	URL string `json:"url"`
-}
-
-// RTMSlackObject : structure for identifying Slack JSON messages
-type RTMSlackObject struct {
-	Type string `json:"type"`
 }
 
 // ParseMessage : Parses message to decide usage
 func ParseMessage(msg []byte, data *Data) {
-	proto := new(RTMSlackObject)
-	err := json.Unmarshal(msg, proto)
+	slackUnmarshal := new(slackJson)
+	err := json.Unmarshal(msg, slackUnmarshal)
 	if err != nil {
 		log.Fatal(err)
 	}
-	if proto.Type == "presence_change" {
-		presenceChange := new(slackPresenceChange)
-		err = json.Unmarshal(msg, presenceChange)
-		if err != nil {
-			log.Fatal(err)
-		}
+	if slackUnmarshal.Type == "presence_change" {
 		for _, user := range data.Users {
-			if user.ID == presenceChange.User {
-				user.Presence = presenceChange.Presence
+			if user.ID == slackUnmarshal.User {
+				user.Presence = slackUnmarshal.Presence
 				log.Printf("%s is now %s", user.Name, user.Presence)
 			}
 		}
-	} else if proto.Type == "hello" {
+	} else if slackUnmarshal.Type == "hello" {
 		log.Print("Successfully logged in.")
-	} else if proto.Type == "reconnect_url" {
-		urlContainer := new(reconnectURL)
-		err = json.Unmarshal(msg, urlContainer)
-		if err != nil {
-			log.Fatal(err)
-		}
-		data.URL = urlContainer.URL
+	} else if slackUnmarshal.Type == "reconnect_url" {
+		data.URL = slackUnmarshal.URL
 		log.Printf("New reconnection URL set: %s", data.URL)
 
 	} else {
