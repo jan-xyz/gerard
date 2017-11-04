@@ -1,4 +1,4 @@
-package gerard
+package gerard_core
 
 import (
 	"log"

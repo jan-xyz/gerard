@@ -2,7 +2,7 @@ package main
 
 import (
 	"log"
-	"github.com/jan-xyz/gerard/gerard"
+	"github.com/jan-xyz/gerard/gerard-core"
 	"github.com/gorilla/websocket"
 )
 
@@ -15,13 +15,15 @@ var slackConnection *websocket.Conn
 
 // Connect : connects to a websocket
 func Connect() {
-	slackData := gerard.StartRTM()
+	slackData := gerard_core.StartRTM()
 	for _, user := range slackData.Users {
 		log.Printf("User: %s (%s) is %s", user.Name, user.ID, user.Presence)
 	}
-	slackConnection = gerard.ConnectWebsocket(slackData.URL)
+	log.Print(slackData.Channels)
+	log.Print(slackData.Users)
+	slackConnection = gerard_core.ConnectWebsocket(slackData.URL)
 	for {
-		msg := gerard.ReadMessage(slackConnection)
-		gerard.ParseMessage(msg, slackData)
+		msg := gerard_core.ReadMessage(slackConnection)
+		gerard_core.ParseMessage(msg, slackData)
 	}
 }
