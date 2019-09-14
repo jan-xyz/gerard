@@ -1,13 +1,12 @@
 default: all
 
-all: compile
+all: test build lint
 
-compile: deps test
-	go build ./cmd/gerardd
+build:
+	go build -v .
 
-test: deps
-	go test ./gerard/tests
+test:
+	go test -v .
 
-deps:
-	go get -u github.com/golang/dep/cmd/dep
-	dep ensure
+lint:
+	golint .
