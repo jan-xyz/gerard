@@ -6,8 +6,7 @@ import (
 	"net/http"
 )
 
-// ConnectWebsocket : returns a Websocket connection that can be written/read
-func ConnectWebsocket(slackURL string) *websocket.Conn {
+func connectWebsocket(slackURL string) *websocket.Conn {
 	origin := "http://localhost/"
 	headers := http.Header(map[string][]string{"origin": []string{origin}})
 	conn, resp, err := websocket.DefaultDialer.Dial(slackURL, headers)
@@ -30,7 +29,7 @@ func sendMessage(message string, ws *websocket.Conn) {
 	}
 }
 
-func ReadMessage(ws *websocket.Conn) []byte {
+func readMessage(ws *websocket.Conn) []byte {
 	_, msg, err := ws.ReadMessage()
 	if err != nil {
 		log.Fatal(err)

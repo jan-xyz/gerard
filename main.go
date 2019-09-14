@@ -5,18 +5,17 @@ import (
 )
 
 func main() {
-	Connect()
+	connect()
 }
 
-// Connect : connects to a websocket
-func Connect() {
-	slackData := StartRTM()
+func connect() {
+	slackData := startRTM()
 	for _, user := range slackData.Users {
 		log.Printf("User: %s (%s) is %s", user.Name, user.ID, user.Presence)
 	}
-	slackConnection := ConnectWebsocket(slackData.URL)
+	slackConnection := connectWebsocket(slackData.URL)
 	for {
-		msg := ReadMessage(slackConnection)
+		msg := readMessage(slackConnection)
 		ParseMessage(msg, slackData)
 	}
 }

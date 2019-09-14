@@ -27,7 +27,7 @@ type RTMSlackObject struct {
 }
 
 // ParseMessage : Parses message to decide usage
-func ParseMessage(msg []byte, data *Data) {
+func ParseMessage(msg []byte, d *data) {
 	proto := new(RTMSlackObject)
 	err := json.Unmarshal(msg, proto)
 	if err != nil {
@@ -39,7 +39,7 @@ func ParseMessage(msg []byte, data *Data) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		for _, user := range data.Users {
+		for _, user := range d.Users {
 			if user.ID == presenceChange.User {
 				user.Presence = presenceChange.Presence
 				log.Printf("%s is now %s", user.Name, user.Presence)
@@ -53,8 +53,8 @@ func ParseMessage(msg []byte, data *Data) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		data.URL = urlContainer.URL
-		log.Printf("New reconnection URL set: %s", data.URL)
+		d.URL = urlContainer.URL
+		log.Printf("New reconnection URL set: %s", d.URL)
 
 	} else {
 		log.Printf("Received: %s", string(msg))
