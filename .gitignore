@@ -26,6 +26,5 @@ _testmain.go
 # vim swap
 .*.sw?
 
-# build artifacts but not the source directory
-gerardd
-!/cmd/gerardd
+# build artifacts
+gerard
