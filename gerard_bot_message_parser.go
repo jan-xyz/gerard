@@ -1,4 +1,4 @@
-package gerard
+package main
 
 import (
 	"encoding/json"

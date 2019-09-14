@@ -1,9 +1,9 @@
-package gerard
+package main
 
 import (
+	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
-	"github.com/gorilla/websocket"
 )
 
 // ConnectWebsocket : returns a Websocket connection that can be written/read

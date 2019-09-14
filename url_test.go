@@ -1,16 +1,15 @@
-package tests
+package main
 
 import (
 	"os"
 	"testing"
-	"github.com/jan-xyz/gerard/gerard"
 )
 
 func TestGetLoginURL(t *testing.T) {
 	testAPIToken := "test"
 	expectedURL := "http://slack.com/api/rtm.start?token=" + testAPIToken
 	os.Setenv("ROLLMOPS_SLACK_API_KEY", testAPIToken)
-	url := gerard.GetLoginURL()
+	url := GetLoginURL()
 	if url != expectedURL {
 		t.Fail()
 	}
